@@ -10,59 +10,86 @@ namespace ImageToAscii
 {
     public static class ASCIIGenerator
     {
-        //TODO: refactor further, implement into app
+        //TODO: refactor further
 
         public static StringBuilder ConvertImage(string inputFilePath, bool isDark)
         {
             StringBuilder sb = new StringBuilder();
 
-            //StreamWriter sw = new StreamWriter(outputFile);
-
-            int n = 1;
-
-            Bitmap bmp = (Bitmap)Image.FromFile(inputFilePath);
-            string[] convertedBmp = BmpConverter.ConvertBmp(bmp);
-
-            if (isDark)
-            {
-                convertedBmp = BmpConverter.ConvertBmpInversed(bmp);
-            }
+            Bitmap bitmap = (Bitmap)Image.FromFile(inputFilePath);
+            string[] convertedBitmap = ConvertBitmap(bitmap, isDark);
             
-            for (int i = 0; i < convertedBmp.Length; i++)
+            for (int i = 0; i < convertedBitmap.Length; i++)
             {
-                string currentLine = convertedBmp[i];
-                DrawLine(n, currentLine, sb);
+                string currentLine = convertedBitmap[i];
+                DrawLine(currentLine, sb);
             }
 
             return sb;
         }
 
-        public static void DrawLine(int n, string lineCode, StringBuilder sb)
+        private static void DrawLine(string lineCode, StringBuilder sb)
         {
-            var square = 2 * n;
-
-            string black = new string('@', square);
-            string veryDark = new string('B', square);
-            string dark = new string('E', square);
-            string neutralDark = new string('c', square);
-            string neutralLight = new string(';', square);
-            string light = new string('"', square);
-            string veryLight = new string('.', square);
-            string white = new string(' ', square);
-
-            string lineFormat = string.Empty;
+            string currentLine = string.Empty;
 
             foreach (char c in lineCode)
-            {
-                lineFormat += ("{" + c.ToString() + "}");
+            {                
+                currentLine += Constants.brightnessKvpList[int.Parse(c.ToString())].Value;
             }
 
-            for (int i = 0; i < n; i++)
+            sb.AppendLine(currentLine);
+        }
+
+        private static string[] ConvertBitmap(Bitmap bitmap, bool isDark)
+        {
+            int[,] converted = new int[bitmap.Height, bitmap.Width];
+
+            for (int i = 0; i < bitmap.Height; i++)
             {
-                sb.AppendFormat(lineFormat, white, veryLight, light, neutralLight, neutralDark, dark, veryDark, black);
-                sb.AppendLine();
-                //sw.WriteLine(lineFormat, white, veryLight, light, neutralLight, neutralDark, dark, veryDark, black);
+                for (int j = 0; j < bitmap.Width; j++)
+                {
+                    var color = bitmap.GetPixel(j, i);
+                    var brightness = color.GetBrightness();
+                    
+                    for (int k = Constants.largestIndex; k >= 0; k--)
+                    {
+                        if (brightness <= Constants.brightnessKvpList[k].Key)
+                        {
+                            converted[i, j] = k;
+
+                            if (isDark)
+                            {
+                                converted[i, j] = Constants.largestIndex - k;
+                            }
+
+                            break;
+                        }
+                    }
+                }
             }
+
+            return MatrixToStringArray(converted);
+        }
+
+        private static string[] MatrixToStringArray(int[,] converted)
+        {
+            string[] lines = new string[converted.GetLength(0)];
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                int[] row = new int[converted.GetLength(1)];
+
+                for (int j = 0; j < converted.GetLength(1); j++)
+                {
+                    row[j] = converted[i, j];
+                }
+
+                string line = String.Join("", row.Select(p => p.ToString()).ToArray());
+
+                lines[i] = line;
+            }
+
+            return lines;
         }
     }
 }
