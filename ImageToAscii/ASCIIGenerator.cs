@@ -8,11 +8,22 @@ using System.Threading.Tasks;
 
 namespace ImageToAscii
 {
-    public static class ASCIIGenerator
+    public class ASCIIGenerator
     {
         //TODO: refactor further
+        public ASCIIGenerator(double[] levels)
+        {
+            BrightnessLevels = levels;
+        }
 
-        public static StringBuilder ConvertImage(string inputFilePath, bool isDark)
+        public double[] BrightnessLevels
+        {
+            get;//{ return brightnessLevels; }
+            set;//{ brightnessLevels = value; }
+        }
+
+
+        public StringBuilder ConvertImage(string inputFilePath, bool isDark)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -28,19 +39,19 @@ namespace ImageToAscii
             return sb;
         }
 
-        private static void DrawLine(string lineCode, StringBuilder sb)
+        private void DrawLine(string lineCode, StringBuilder sb)
         {
             string currentLine = string.Empty;
 
             foreach (char c in lineCode)
             {                
-                currentLine += Constants.brightnessKvpList[int.Parse(c.ToString())].Value;
+                currentLine += Constants.constBrightnessSymbols[int.Parse(c.ToString())];
             }
 
             sb.AppendLine(currentLine);
         }
 
-        private static string[] ConvertBitmap(Bitmap bitmap, bool isDark)
+        private string[] ConvertBitmap(Bitmap bitmap, bool isDark)
         {
             int[,] converted = new int[bitmap.Height, bitmap.Width];
 
@@ -49,20 +60,34 @@ namespace ImageToAscii
                 for (int j = 0; j < bitmap.Width; j++)
                 {
                     var color = bitmap.GetPixel(j, i);
-                    var brightness = color.GetBrightness();
-                    
-                    for (int k = Constants.largestIndex; k >= 0; k--)
+                    double brightness = color.GetBrightness();
+
+                    if (isDark)
                     {
-                        if (brightness <= Constants.brightnessKvpList[k].Key)
+                        for (int k = 0; k < Constants.largestIndex; k++)
                         {
-                            converted[i, j] = k;
-
-                            if (isDark)
+                            if (brightness >= BrightnessLevels[k])
                             {
-                                converted[i, j] = Constants.largestIndex - k;
-                            }
+                                converted[i, j] = k;
 
-                            break;
+                                if (isDark)
+                                {
+                                    converted[i, j] = Constants.largestIndex - k;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int k = Constants.largestIndex; k >= 0; k--)
+                        {
+                            if (brightness <= BrightnessLevels[k])
+                            {
+                                converted[i, j] = k;
+                                break;
+                            }
                         }
                     }
                 }
@@ -71,7 +96,7 @@ namespace ImageToAscii
             return MatrixToStringArray(converted);
         }
 
-        private static string[] MatrixToStringArray(int[,] converted)
+        private string[] MatrixToStringArray(int[,] converted)
         {
             string[] lines = new string[converted.GetLength(0)];
 

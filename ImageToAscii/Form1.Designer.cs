@@ -40,7 +40,10 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.TextLengthLabel = new System.Windows.Forms.Label();
             this.DarkThemeSelect = new System.Windows.Forms.CheckBox();
+            this.BrightnessSlider = new System.Windows.Forms.TrackBar();
+            this.BrightnessLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FontSlider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).BeginInit();
             this.SuspendLayout();
             // 
             // ConvertButton
@@ -173,11 +176,53 @@
             this.DarkThemeSelect.UseVisualStyleBackColor = true;
             this.DarkThemeSelect.CheckedChanged += new System.EventHandler(this.DarkThemeSelect_CheckedChanged);
             // 
+            // BrightnessSlider
+            // 
+            this.BrightnessSlider.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BrightnessSlider.AutoSize = false;
+            this.BrightnessSlider.BackColor = System.Drawing.SystemColors.Control;
+            this.BrightnessSlider.Cursor = System.Windows.Forms.Cursors.Default;
+            this.BrightnessSlider.Location = new System.Drawing.Point(1035, 78);
+            this.BrightnessSlider.Minimum = -10;
+            this.BrightnessSlider.Name = "BrightnessSlider";
+            this.BrightnessSlider.Size = new System.Drawing.Size(246, 32);
+            this.BrightnessSlider.TabIndex = 13;
+            this.BrightnessSlider.Scroll += new System.EventHandler(this.BrightnessSlider_Scroll);
+            // 
+            // BrightnessLabel
+            // 
+            this.BrightnessLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BrightnessLabel.AutoSize = true;
+            this.BrightnessLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BrightnessLabel.Location = new System.Drawing.Point(877, 83);
+            this.BrightnessLabel.Name = "BrightnessLabel";
+            this.BrightnessLabel.Size = new System.Drawing.Size(152, 18);
+            this.BrightnessLabel.TabIndex = 14;
+            this.BrightnessLabel.Text = "Adjust brightness:";
+            this.BrightnessLabel.Click += new System.EventHandler(this.BrightnessLabel_Click);
+            //
+            // set light theme
+            //
+            OutputTextBox.ForeColor = lightText;
+            OutputTextBox.BackColor = lightTextBox;
+            StatusTextBox.ForeColor = lightText;
+            StatusTextBox.BackColor = lightTextBox;
+            this.ForeColor = lightText;
+            this.BackColor = lightBg;
+            LoadImageButton.BackColor = lightButtons;
+            ConvertButton.BackColor = lightButtons;
+            SaveButton.BackColor = lightButtons;
+            DarkThemeSelect.BackColor = lightButtons;
+            FontSlider.BackColor = lightBg;
+            BrightnessSlider.BackColor = lightBg;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1422, 733);
+            this.Controls.Add(this.BrightnessLabel);
+            this.Controls.Add(this.BrightnessSlider);
             this.Controls.Add(this.DarkThemeSelect);
             this.Controls.Add(this.TextLengthLabel);
             this.Controls.Add(this.FontSize);
@@ -194,6 +239,7 @@
             this.Text = "Image to ASCII converter";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FontSlider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -212,6 +258,8 @@
         private System.Windows.Forms.Label TextLengthLabel;
         private System.Windows.Forms.CheckBox DarkThemeSelect;
         private System.Windows.Forms.TextBox StatusTextBox;
+        protected System.Windows.Forms.TrackBar BrightnessSlider;
+        private System.Windows.Forms.Label BrightnessLabel;
     }
 }
 

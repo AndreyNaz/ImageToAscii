@@ -18,14 +18,22 @@ namespace ImageToAscii
             InitializeComponent();
         }
 
-        Color dark = Color.FromArgb(32, 40, 48);
-        Color dark2 = Color.FromArgb(50, 58, 66);
-        Color medium = Color.FromArgb(70, 78, 86);
-        Color light = Color.FromArgb(240, 240, 240);
-        Color light2 = Color.FromArgb(220, 220, 220);
+        Color darkTextBox = Color.FromArgb(28, 32, 47);
+        Color darkBg = Color.FromArgb(41, 48, 71);
+        Color darkButtons = Color.FromArgb(56, 66, 99);
+        Color darkText = Color.FromArgb(220, 220, 220);
+
+        Color lightBg = Color.FromArgb(220, 220, 220);
+        Color lightTextBox = Color.FromArgb(240, 240, 240);
+        Color lightButtons = Color.FromArgb(200, 200, 200);
+        Color lightText = Color.FromArgb(0, 0, 0);
+
+
+        ASCIIGenerator asciiGenerator = new ASCIIGenerator(Constants.constBrightnessLevels);
         StringBuilder sb = new StringBuilder();
         bool imageLoaded = false;
         bool isDarkTheme = false;
+        double brightnessCounter = 0;
 
         private void ConvertButton_Click(object sender, EventArgs e)
         {
@@ -35,7 +43,7 @@ namespace ImageToAscii
                 return;
             }
 
-            sb = ASCIIGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
             OutputTextBox.Text = sb.ToString();
             StatusTextBox.AppendText(Environment.NewLine + $"Successfully converted \"{openFileDialog1.SafeFileName}\"");
             TextLengthLabel.Text = $"Text length: { OutputTextBox.Text.Length} characters";
@@ -89,49 +97,68 @@ namespace ImageToAscii
             if (DarkThemeSelect.Checked == true)
             {
                 isDarkTheme = true;
-                OutputTextBox.BackColor = dark;
-                OutputTextBox.ForeColor = light;
-                StatusTextBox.BackColor = dark;
-                StatusTextBox.ForeColor = light;
-                this.ForeColor = light;
-                this.BackColor = dark2;
-                LoadImageButton.BackColor = medium;
-                ConvertButton.BackColor = medium;
-                SaveButton.BackColor = medium;
-                DarkThemeSelect.BackColor = medium;
-                FontSlider.BackColor = dark2;
+                OutputTextBox.BackColor = darkTextBox;
+                OutputTextBox.ForeColor = darkText;
+                StatusTextBox.BackColor = darkTextBox;
+                StatusTextBox.ForeColor = darkText;
+                this.ForeColor = darkText;
+                this.BackColor = darkBg;
+                LoadImageButton.BackColor = darkButtons;
+                ConvertButton.BackColor = darkButtons;
+                SaveButton.BackColor = darkButtons;
+                DarkThemeSelect.BackColor = darkButtons;
+                FontSlider.BackColor = darkBg;
+                BrightnessSlider.BackColor = darkBg;
 
                 if (!imageLoaded)
                 {
                     return;
                 }
 
-                sb = ASCIIGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+                sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
                 OutputTextBox.Text = sb.ToString();
             }
             else
             {
                 isDarkTheme = false;
-                OutputTextBox.ForeColor = dark;
-                OutputTextBox.BackColor = light2;
-                StatusTextBox.ForeColor = dark;
-                StatusTextBox.BackColor = light2;
-                this.ForeColor = dark;
-                this.BackColor = light;
-                LoadImageButton.BackColor = light;
-                ConvertButton.BackColor = light;
-                SaveButton.BackColor = light;
-                DarkThemeSelect.BackColor = light;
-                FontSlider.BackColor = light;
+                OutputTextBox.ForeColor = lightText;
+                OutputTextBox.BackColor = lightTextBox;
+                StatusTextBox.ForeColor = lightText;
+                StatusTextBox.BackColor = lightTextBox;
+                this.ForeColor = lightText;
+                this.BackColor = lightBg;
+                LoadImageButton.BackColor = lightButtons;
+                ConvertButton.BackColor = lightButtons;
+                SaveButton.BackColor = lightButtons;
+                DarkThemeSelect.BackColor = lightButtons;
+                FontSlider.BackColor = lightBg;
+                BrightnessSlider.BackColor = lightBg;
 
                 if (!imageLoaded)
                 {
                     return;
                 }
 
-                sb = ASCIIGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+                sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
                 OutputTextBox.Text = sb.ToString();
             }
+        }
+
+        private void BrightnessSlider_Scroll(object sender, EventArgs e)
+        {
+            brightnessCounter = BrightnessSlider.Value * 0.07;
+            if (!imageLoaded)
+            {
+                return;
+            }
+            asciiGenerator.BrightnessLevels = BrightnessController.ChangeBrightness(asciiGenerator.BrightnessLevels, brightnessCounter);
+            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            OutputTextBox.Text = sb.ToString();
+        }
+
+        private void BrightnessLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
