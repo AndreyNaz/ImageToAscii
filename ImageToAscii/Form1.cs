@@ -16,6 +16,8 @@ namespace ImageToAscii
         public Form1()
         {
             InitializeComponent();
+
+            SetTheme(isDarkTheme);
         }
 
         Color darkTextBox = Color.FromArgb(28, 32, 47);
@@ -31,6 +33,7 @@ namespace ImageToAscii
 
         ASCIIGenerator asciiGenerator = new ASCIIGenerator(Constants.constBrightnessLevels);
         StringBuilder sb = new StringBuilder();
+
         bool imageLoaded = false;
         bool isDarkTheme = false;
         double brightnessCounter = 0;
@@ -97,6 +100,39 @@ namespace ImageToAscii
             if (DarkThemeSelect.Checked == true)
             {
                 isDarkTheme = true;
+            }
+            else
+            {
+                isDarkTheme = false;
+            }
+
+            SetTheme(isDarkTheme);
+
+            if (!imageLoaded)
+            {
+                return;
+            }
+
+            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            OutputTextBox.Text = sb.ToString();
+        }
+
+        private void BrightnessSlider_Scroll(object sender, EventArgs e)
+        {
+            brightnessCounter = BrightnessSlider.Value * 0.06;
+            if (!imageLoaded)
+            {
+                return;
+            }
+            asciiGenerator.BrightnessLevels = BrightnessController.ChangeBrightness(asciiGenerator.BrightnessLevels, brightnessCounter);
+            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            OutputTextBox.Text = sb.ToString();
+        }
+
+        private void SetTheme(bool isDark)
+        {
+            if (isDark)
+            {
                 OutputTextBox.BackColor = darkTextBox;
                 OutputTextBox.ForeColor = darkText;
                 StatusTextBox.BackColor = darkTextBox;
@@ -109,18 +145,9 @@ namespace ImageToAscii
                 DarkThemeSelect.BackColor = darkButtons;
                 FontSlider.BackColor = darkBg;
                 BrightnessSlider.BackColor = darkBg;
-
-                if (!imageLoaded)
-                {
-                    return;
-                }
-
-                sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
-                OutputTextBox.Text = sb.ToString();
             }
             else
             {
-                isDarkTheme = false;
                 OutputTextBox.ForeColor = lightText;
                 OutputTextBox.BackColor = lightTextBox;
                 StatusTextBox.ForeColor = lightText;
@@ -133,32 +160,7 @@ namespace ImageToAscii
                 DarkThemeSelect.BackColor = lightButtons;
                 FontSlider.BackColor = lightBg;
                 BrightnessSlider.BackColor = lightBg;
-
-                if (!imageLoaded)
-                {
-                    return;
-                }
-
-                sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
-                OutputTextBox.Text = sb.ToString();
             }
-        }
-
-        private void BrightnessSlider_Scroll(object sender, EventArgs e)
-        {
-            brightnessCounter = BrightnessSlider.Value * 0.07;
-            if (!imageLoaded)
-            {
-                return;
-            }
-            asciiGenerator.BrightnessLevels = BrightnessController.ChangeBrightness(asciiGenerator.BrightnessLevels, brightnessCounter);
-            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
-            OutputTextBox.Text = sb.ToString();
-        }
-
-        private void BrightnessLabel_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

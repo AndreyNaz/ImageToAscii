@@ -13,13 +13,15 @@ namespace ImageToAscii
         //TODO: refactor further
         public ASCIIGenerator(double[] levels)
         {
-            BrightnessLevels = levels;
+            BrightnessLevels = new double[Constants.constBrightnessLevels.Length];
+            Array.Copy(levels, BrightnessLevels, Constants.constBrightnessLevels.Length);
+            //Deep copies the const to avoid referencing it
         }
 
         public double[] BrightnessLevels
         {
-            get;//{ return brightnessLevels; }
-            set;//{ brightnessLevels = value; }
+            get;
+            set;
         }
 
 

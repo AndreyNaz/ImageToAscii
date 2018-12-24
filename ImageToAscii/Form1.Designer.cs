@@ -199,22 +199,6 @@
             this.BrightnessLabel.Size = new System.Drawing.Size(152, 18);
             this.BrightnessLabel.TabIndex = 14;
             this.BrightnessLabel.Text = "Adjust brightness:";
-            this.BrightnessLabel.Click += new System.EventHandler(this.BrightnessLabel_Click);
-            //
-            // set light theme
-            //
-            OutputTextBox.ForeColor = lightText;
-            OutputTextBox.BackColor = lightTextBox;
-            StatusTextBox.ForeColor = lightText;
-            StatusTextBox.BackColor = lightTextBox;
-            this.ForeColor = lightText;
-            this.BackColor = lightBg;
-            LoadImageButton.BackColor = lightButtons;
-            ConvertButton.BackColor = lightButtons;
-            SaveButton.BackColor = lightButtons;
-            DarkThemeSelect.BackColor = lightButtons;
-            FontSlider.BackColor = lightBg;
-            BrightnessSlider.BackColor = lightBg;
             // 
             // Form1
             // 

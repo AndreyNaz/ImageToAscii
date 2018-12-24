@@ -11,14 +11,12 @@ namespace ImageToAscii
 
         public static double[] ChangeBrightness(double[] levels, double brigtnessCounter)
         {
-            double[] consts = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.3, 0.1 };
-            //WHY THE FUCK WONT THIS WORK BY REFERENCING THE CONSTANTS CLASS
-            //INSTEAD OF ME HAVING TO HARDCODE THE ABOVE LINE LIKE A FUCKING PAJEET??????
             //Referencing constants.constBrightnessLevels above causes the code below
-            //to change the elements in consts for some strange unknown reason
+            //to change the elements in consts. Using a deep copy in the converter constructor 
+            //fixes the issue.
             for (int i = 0; i < Constants.constBrightnessLevels.Length; i++)
             {
-                double level = consts[i];
+                double level = Constants.constBrightnessLevels[i];
                 double newLevel = level - level * brigtnessCounter;
                 //newLevel = level - level * brigtnessCounter adjusts gamma and looks better
                 //newLevel = level - brigtnessCounter adjusts brightness
