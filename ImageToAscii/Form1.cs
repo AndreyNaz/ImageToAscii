@@ -30,13 +30,14 @@ namespace ImageToAscii
         Color lightButtons = Color.FromArgb(200, 200, 200);
         Color lightText = Color.FromArgb(0, 0, 0);
 
-
         ASCIIGenerator asciiGenerator = new ASCIIGenerator(Constants.constBrightnessLevels);
         StringBuilder sb = new StringBuilder();
 
         bool imageLoaded = false;
         bool isDarkTheme = false;
         double brightnessCounter = 0;
+        Bitmap loadedImage;
+        Bitmap resizedImage;
 
         private void ConvertButton_Click(object sender, EventArgs e)
         {
@@ -46,7 +47,8 @@ namespace ImageToAscii
                 return;
             }
 
-            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            resizeSlider.Value = 0;
+            sb = asciiGenerator.ConvertImage(loadedImage, isDarkTheme);
             OutputTextBox.Text = sb.ToString();
             StatusTextBox.AppendText(Environment.NewLine + $"Successfully converted \"{openFileDialog1.SafeFileName}\"");
             TextLengthLabel.Text = $"Text length: { OutputTextBox.Text.Length} characters";
@@ -54,7 +56,7 @@ namespace ImageToAscii
 
         private void LoadImageButton_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
+            openFileDialog1.ShowDialog();         
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -75,8 +77,11 @@ namespace ImageToAscii
         }
 
         private void FontSlider_Scroll(object sender, EventArgs e)
-        {            
-            OutputTextBox.ZoomFactor = (float)FontSlider.Value / 8 + 0.2f;
+        {
+            OutputTextBox.Font = new Font(
+                OutputTextBox.Font.FontFamily,
+                FontSlider.Value,
+                OutputTextBox.Font.Style);
         }
 
         private void OutputTextBox_TextChanged(object sender, EventArgs e)
@@ -87,6 +92,8 @@ namespace ImageToAscii
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             imageLoaded = true;
+            loadedImage = (Bitmap)Image.FromFile(openFileDialog1.FileName);
+            resizedImage = (Bitmap)Image.FromFile(openFileDialog1.FileName);
             StatusTextBox.AppendText(Environment.NewLine + $"Loaded \"{openFileDialog1.SafeFileName}\"");
         }
 
@@ -113,19 +120,19 @@ namespace ImageToAscii
                 return;
             }
 
-            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            sb = asciiGenerator.ConvertImage(resizedImage, isDarkTheme);
             OutputTextBox.Text = sb.ToString();
         }
 
         private void BrightnessSlider_Scroll(object sender, EventArgs e)
         {
-            brightnessCounter = BrightnessSlider.Value * 0.06;
+            brightnessCounter = BrightnessSlider.Value * 0.07;
             if (!imageLoaded)
             {
                 return;
             }
             asciiGenerator.BrightnessLevels = BrightnessController.ChangeBrightness(asciiGenerator.BrightnessLevels, brightnessCounter);
-            sb = asciiGenerator.ConvertImage(openFileDialog1.FileName, isDarkTheme);
+            sb = asciiGenerator.ConvertImage(resizedImage, isDarkTheme);
             OutputTextBox.Text = sb.ToString();
         }
 
@@ -145,6 +152,7 @@ namespace ImageToAscii
                 DarkThemeSelect.BackColor = darkButtons;
                 FontSlider.BackColor = darkBg;
                 BrightnessSlider.BackColor = darkBg;
+                resizeSlider.BackColor = darkBg;
             }
             else
             {
@@ -160,7 +168,19 @@ namespace ImageToAscii
                 DarkThemeSelect.BackColor = lightButtons;
                 FontSlider.BackColor = lightBg;
                 BrightnessSlider.BackColor = lightBg;
+                resizeSlider.BackColor = lightBg;
             }
+        }
+
+        private void resizeSlider_Scroll(object sender, EventArgs e)
+        {
+            if (!imageLoaded)
+            {
+                return;
+            }
+            resizedImage = ImageResizer.ResizeImage(loadedImage, resizeSlider.Value);
+            sb = asciiGenerator.ConvertImage(resizedImage, isDarkTheme);
+            OutputTextBox.Text = sb.ToString();
         }
     }
 }

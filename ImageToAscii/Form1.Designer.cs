@@ -42,8 +42,11 @@
             this.DarkThemeSelect = new System.Windows.Forms.CheckBox();
             this.BrightnessSlider = new System.Windows.Forms.TrackBar();
             this.BrightnessLabel = new System.Windows.Forms.Label();
+            this.resizeSlider = new System.Windows.Forms.TrackBar();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FontSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.resizeSlider)).BeginInit();
             this.SuspendLayout();
             // 
             // ConvertButton
@@ -125,12 +128,12 @@
             this.FontSlider.AutoSize = false;
             this.FontSlider.BackColor = System.Drawing.SystemColors.Control;
             this.FontSlider.Location = new System.Drawing.Point(96, 78);
-            this.FontSlider.Maximum = 17;
-            this.FontSlider.Minimum = 1;
+            this.FontSlider.Maximum = 18;
+            this.FontSlider.Minimum = 2;
             this.FontSlider.Name = "FontSlider";
-            this.FontSlider.Size = new System.Drawing.Size(246, 32);
+            this.FontSlider.Size = new System.Drawing.Size(243, 32);
             this.FontSlider.TabIndex = 7;
-            this.FontSlider.Value = 9;
+            this.FontSlider.Value = 6;
             this.FontSlider.Scroll += new System.EventHandler(this.FontSlider_Scroll);
             // 
             // FontSize
@@ -154,7 +157,7 @@
             this.TextLengthLabel.AutoSize = true;
             this.TextLengthLabel.BackColor = System.Drawing.Color.Transparent;
             this.TextLengthLabel.Font = new System.Drawing.Font("Consolas", 9F);
-            this.TextLengthLabel.Location = new System.Drawing.Point(348, 83);
+            this.TextLengthLabel.Location = new System.Drawing.Point(345, 83);
             this.TextLengthLabel.Name = "TextLengthLabel";
             this.TextLengthLabel.Size = new System.Drawing.Size(120, 18);
             this.TextLengthLabel.TabIndex = 9;
@@ -182,10 +185,10 @@
             this.BrightnessSlider.AutoSize = false;
             this.BrightnessSlider.BackColor = System.Drawing.SystemColors.Control;
             this.BrightnessSlider.Cursor = System.Windows.Forms.Cursors.Default;
-            this.BrightnessSlider.Location = new System.Drawing.Point(1035, 78);
+            this.BrightnessSlider.Location = new System.Drawing.Point(1078, 78);
             this.BrightnessSlider.Minimum = -10;
             this.BrightnessSlider.Name = "BrightnessSlider";
-            this.BrightnessSlider.Size = new System.Drawing.Size(246, 32);
+            this.BrightnessSlider.Size = new System.Drawing.Size(203, 32);
             this.BrightnessSlider.TabIndex = 13;
             this.BrightnessSlider.Scroll += new System.EventHandler(this.BrightnessSlider_Scroll);
             // 
@@ -194,17 +197,44 @@
             this.BrightnessLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BrightnessLabel.AutoSize = true;
             this.BrightnessLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BrightnessLabel.Location = new System.Drawing.Point(877, 83);
+            this.BrightnessLabel.Location = new System.Drawing.Point(920, 83);
             this.BrightnessLabel.Name = "BrightnessLabel";
             this.BrightnessLabel.Size = new System.Drawing.Size(152, 18);
             this.BrightnessLabel.TabIndex = 14;
             this.BrightnessLabel.Text = "Adjust brightness:";
+            // 
+            // resizeSlider
+            // 
+            this.resizeSlider.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.resizeSlider.AutoSize = false;
+            this.resizeSlider.BackColor = System.Drawing.SystemColors.Control;
+            this.resizeSlider.Cursor = System.Windows.Forms.Cursors.Default;
+            this.resizeSlider.Location = new System.Drawing.Point(787, 78);
+            this.resizeSlider.Maximum = 0;
+            this.resizeSlider.Minimum = -9;
+            this.resizeSlider.Name = "resizeSlider";
+            this.resizeSlider.Size = new System.Drawing.Size(118, 32);
+            this.resizeSlider.TabIndex = 15;
+            this.resizeSlider.Scroll += new System.EventHandler(this.resizeSlider_Scroll);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(669, 83);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(112, 18);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Resize image:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1422, 733);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.resizeSlider);
             this.Controls.Add(this.BrightnessLabel);
             this.Controls.Add(this.BrightnessSlider);
             this.Controls.Add(this.DarkThemeSelect);
@@ -224,6 +254,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FontSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.resizeSlider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,6 +275,8 @@
         private System.Windows.Forms.TextBox StatusTextBox;
         protected System.Windows.Forms.TrackBar BrightnessSlider;
         private System.Windows.Forms.Label BrightnessLabel;
+        protected System.Windows.Forms.TrackBar resizeSlider;
+        private System.Windows.Forms.Label label1;
     }
 }
 

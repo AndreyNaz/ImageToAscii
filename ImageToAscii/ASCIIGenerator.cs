@@ -25,13 +25,12 @@ namespace ImageToAscii
         }
 
 
-        public StringBuilder ConvertImage(string inputFilePath, bool isDark)
+        public StringBuilder ConvertImage(Bitmap bitmap, bool isDark)
         {
             StringBuilder sb = new StringBuilder();
 
-            Bitmap bitmap = (Bitmap)Image.FromFile(inputFilePath);
             string[] convertedBitmap = ConvertBitmap(bitmap, isDark);
-            
+
             for (int i = 0; i < convertedBitmap.Length; i++)
             {
                 string currentLine = convertedBitmap[i];
@@ -45,9 +44,11 @@ namespace ImageToAscii
         {
             string currentLine = string.Empty;
 
-            foreach (char c in lineCode)
-            {                
-                currentLine += Constants.constBrightnessSymbols[int.Parse(c.ToString())];
+            int[] charCodes = lineCode.Split(' ').Select(int.Parse).ToArray();
+
+            foreach (int i in charCodes)
+            {
+                currentLine += Constants.constBrightnessSymbols[i];
             }
 
             sb.AppendLine(currentLine);
@@ -66,17 +67,11 @@ namespace ImageToAscii
 
                     if (isDark)
                     {
-                        for (int k = 0; k < Constants.largestIndex; k++)
+                        for (int k = 0; k <= Constants.largestIndex; k++)
                         {
                             if (brightness >= BrightnessLevels[k])
                             {
-                                converted[i, j] = k;
-
-                                if (isDark)
-                                {
-                                    converted[i, j] = Constants.largestIndex - k;
-                                }
-
+                                converted[i, j] = Constants.largestIndex - k;
                                 break;
                             }
                         }
@@ -94,7 +89,6 @@ namespace ImageToAscii
                     }
                 }
             }
-
             return MatrixToStringArray(converted);
         }
 
@@ -111,7 +105,7 @@ namespace ImageToAscii
                     row[j] = converted[i, j];
                 }
 
-                string line = String.Join("", row.Select(p => p.ToString()).ToArray());
+                string line = String.Join(" ", row.Select(p => p.ToString()).ToArray());
 
                 lines[i] = line;
             }

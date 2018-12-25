@@ -10,28 +10,15 @@ namespace ImageToAscii
     {
         // Contains the thresholds for each brightness level, from white (1.0) to black (0.0)
         public static readonly double[] constBrightnessLevels = 
-            { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.3, 0.2 };
+            //{ 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1 };
+            { 1.00, 0.92, 0.84, 0.76, 0.68, 0.60, 0.52, 0.44, 0.36, 0.26, 0.16, 0.08 };
 
         // Contains the char representation for each of the above.
         // Both arrays are ordered accordingly from brightest to darkest.
         public static readonly string[] constBrightnessSymbols = 
-            { "  ", "..", ",,", ";;", "cc", "EE", "BB", "@@" };
-
-        // Contains keyValuePairs of the corresponding elements from the above arrays; not used atm
-        public static List<KeyValuePair<double, string>> brightnessKvpList = 
-            new List<KeyValuePair<double, string>>()
-            {
-                new KeyValuePair<double, string>(constBrightnessLevels[0], constBrightnessSymbols[0]),
-                new KeyValuePair<double, string>(constBrightnessLevels[1], constBrightnessSymbols[1]),
-                new KeyValuePair<double, string>(constBrightnessLevels[2], constBrightnessSymbols[2]),
-                new KeyValuePair<double, string>(constBrightnessLevels[3], constBrightnessSymbols[3]),
-                new KeyValuePair<double, string>(constBrightnessLevels[4], constBrightnessSymbols[4]),
-                new KeyValuePair<double, string>(constBrightnessLevels[5], constBrightnessSymbols[5]),
-                new KeyValuePair<double, string>(constBrightnessLevels[6], constBrightnessSymbols[6]),
-                new KeyValuePair<double, string>(constBrightnessLevels[7], constBrightnessSymbols[7])
-            };
+            { "  ", "..", "..", ",,", ";;", "cc", "cy", "YY","EE", "BB","B@", "@@" };
 
         // for utility
-        public static int largestIndex = brightnessKvpList.Count - 1;
+        public static int largestIndex = constBrightnessLevels.Length - 1;
     }
 }
